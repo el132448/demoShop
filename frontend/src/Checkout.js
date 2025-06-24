@@ -6,7 +6,7 @@ import { CartContext } from './CartContext'
 
 export default function Checkout() {
 
-  let {cartItems} = useContext(CartContext)
+  let { cartItems, setCartItems } = useContext(CartContext)
   let cartEmpty = cartItems.length <= 0 ? true : false
 
   let grandTotal = cartItems.reduce((total, product)=>{
@@ -90,7 +90,8 @@ export default function Checkout() {
     .then((data) => {
       console.log("Checkout success:", data);
       alert("Order placed successfully!");
-      // 這裡可以加清除購物車等後續處理
+      // ✅ Clear the cart
+      setCartItems([]); 
     })
     .catch((err) => {
       console.error("Checkout error:", err);

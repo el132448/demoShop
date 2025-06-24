@@ -7,28 +7,25 @@ export default function ProductDetail() {
   let params = useParams()
   let [productDetail, setProductDetail] = useState(null)
 
-  useEffect(()=>{
-    fetch('https://raw.githubusercontent.com/el132448/react-shopping-cart/master/product-info.json')
-    .then(response => response.json())
-    .then(data => {
-      let productInfo = data.find((element)=>{
-        return element.id === parseInt(params.id)
+  useEffect(() => {
+    fetch(`http://localhost:5000/api/products/${params.id}`)
+      .then(response => response.json())
+      .then(data => {
+        setProductDetail(data)
       })
-      setProductDetail(productInfo)
-      })
-    },[params.id]) //<== Dependency Array
+  }, [params.id]) //<== Dependency Array
 
     return (
     <div>
       {
         productDetail &&
         <div className="ProductDetail">
-          <Title mainTitle={productDetail.name+' Product Detail'}/>
+          <Title mainTitle={'Product Detail'}/>
           <table width="100%">
             <tbody>
               <tr>
                 <td align="right">
-                  <img src={process.env.PUBLIC_URL+'/img/'+productDetail.image} alt={productDetail.name} width="400"/>
+                  <img src={productDetail.image} alt={productDetail.name} width="400"/>
                 </td>
                 <td width="45%" padding="10">
                   <p>Name : {productDetail.name}</p>
