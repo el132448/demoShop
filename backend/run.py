@@ -1,6 +1,7 @@
+from dotenv import load_dotenv
 from app import create_app
 
-# Entry point (starts the app)
+load_dotenv()  # 載入 .env
 
 app = create_app()
 

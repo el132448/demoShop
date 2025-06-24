@@ -1,9 +1,11 @@
-import React, {useState, useEffect} from "react" //React Hook
+import React, { useContext, useState, useEffect} from "react" //React Hook
 import {Link} from "react-router-dom"
 import Title from "./Title"
 import QuantityBtn from './QuantityBtn'
+import { CartContext } from "./CartContext";
 
 export default function ProductList() {
+    const { API_BASE } = useContext(CartContext);
     let [productList, setProductList] = useState([])
 
     //useEffect hook
@@ -11,10 +13,10 @@ export default function ProductList() {
         //Situation 1: if without 2nd variable: will active the component for every render
         //Situation 2: if Dependency Array is empty array: only active once when the page 1st render
         //Situation 3: if Dependency Array is variable: active when 1st page render + destinated variable change
-        fetch('http://localhost:5000/api/products')
+        fetch(`${API_BASE}/products`)
         .then(response => response.json())
         .then(data => setProductList(data))
-    },[])
+    },[API_BASE])
 
     // //button showing or hiding product list(unwanted)
     // const [showProduct, setShowProduct] = useState(false)

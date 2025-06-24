@@ -1,19 +1,21 @@
-import {useParams, Link} from "react-router-dom"
+import React, { useContext, useEffect, useState } from 'react';
+import { useParams, Link } from "react-router-dom";
 import Title from "./Title"
 import QuantityBtn from "./QuantityBtn"
-import { useEffect, useState } from "react"
+import { CartContext } from "./CartContext";
 
 export default function ProductDetail() {
+  const { API_BASE } = useContext(CartContext);
   let params = useParams()
   let [productDetail, setProductDetail] = useState(null)
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/products/${params.id}`)
+    fetch(`${API_BASE}/products/${params.id}`)
       .then(response => response.json())
       .then(data => {
         setProductDetail(data)
       })
-  }, [params.id]) //<== Dependency Array
+  }, [params.id, API_BASE]) //<== Dependency Array
 
     return (
     <div>

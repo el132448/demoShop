@@ -11,7 +11,10 @@
 
 # === COMMON ===
 .DS_Store
-*.env
 *.log
 /db_dumps/
 .vscode/
+.venv
+
+# comment for development stage
+# *.env    

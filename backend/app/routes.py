@@ -1,8 +1,22 @@
-from flask import Blueprint, jsonify, request
+import secrets
+from flask import Blueprint, jsonify, make_response, request
 from .models import Product, Order, OrderItem
 from . import db
 
 api_bp = Blueprint('api', __name__)
+
+@api_bp.route('/init_csrf')
+def init_csrf():
+    response = make_response({"message": "CSRF token initialized"})
+    csrf_token = secrets.token_urlsafe(32)
+    response.set_cookie(
+        "csrf_token",
+        csrf_token,
+        httponly=False,   # 讓 JS 可讀取
+        secure=True,      # 上線時用 HTTPS
+        samesite="Lax"    # 防止部分跨站攻擊
+    )
+    return response
 
 # This route returns all products as a JSON list
 @api_bp.route("/products", methods=["GET"])
@@ -21,7 +35,7 @@ def get_product(product_id):
 @api_bp.route("/checkout", methods=["POST"])
 def checkout():
     data = request.get_json()
-    if not data or not isinstance(data, list):
+    if not data or not isinstance(data, dict):
         return jsonify({"error": "Invalid cart data"}), 400
     
     user_id = data.get("user_id")
@@ -34,7 +48,7 @@ def checkout():
 
     try:
         # First, validate stock
-        for item in data:
+        for item in items:
             product = Product.query.get(item["id"])
             quantity = item.get("quantity", 1)
 
@@ -44,7 +58,7 @@ def checkout():
                 return jsonify({"error": f"Not enough stock for {product.name}"}), 400
 
         # Stock is valid — now process the order
-        for item in data:
+        for item in items:
             product = Product.query.get(item["id"])
             quantity = item.get("quantity", 1)
             price = float(product.price)
@@ -60,7 +74,7 @@ def checkout():
 
         order = Order(user_id=user_id, total=total)
         db.session.add(order)
-        db.session.flush()
+        db.session.flush()      # flush to get order.id
 
         for item in order_items:
             item.order_id = order.id

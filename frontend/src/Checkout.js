@@ -13,6 +13,7 @@ export default function Checkout() {
     return total += product.price*product.quantity
   },0)
   const freeShippingPrice = 100
+  const { API_BASE } = useContext(CartContext);
 
   return (
     <>
@@ -81,31 +82,42 @@ export default function Checkout() {
   )
 
   function handleCheckout() {
+    const csrfToken = document.cookie
+      .split("; ")
+      .find(row => row.startsWith("csrf_token="))
+      ?.split("=")[1];
+
     const payload = {
-      user_id: 1,
+      user_id: 1,   // fix user_id be 1 for testing version
       items: cartItems.map(item => ({
         id: item.id,
         quantity: item.quantity
       }))
     };
 
-    fetch("http://localhost:5000/api/checkout", {
+    fetch(`${API_BASE}/checkout`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "X-CSRF-Token": csrfToken
       },
+      credentials: "include",  // 🔒 Important: include cookies
       body: JSON.stringify(payload)
     })
-    .then((res) => res.json())
-    .then((data) => {
+    .then(async (res) => {
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Unknown error");
+      }
+
       console.log("Checkout success:", data);
       alert("Order placed successfully!");
-      // ✅ Clear the cart
-      setCartItems([]); 
+      setCartItems([]);
     })
     .catch((err) => {
       console.error("Checkout error:", err);
-      alert("Something went wrong. Please try again.");
+      alert("Something went wrong.\n" + err.message);
     });
   }
 }

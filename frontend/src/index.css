@@ -144,6 +144,7 @@ img {
   font-size: 30px;
   font-weight: bold;
   margin-right: 30px;
+  min-width: 45px;
 }
 .checkoutSection{
   width: 30%;
