@@ -37,13 +37,15 @@ export default function Checkout() {
                     <tr key={product.id}>
                       <td>
                         <Link to={'/product/'+product.id}>
-                          <img src={process.env.PUBLIC_URL+'/img/'+product.image} alt={product.name}/>
+                          <img src={product.image} alt={product.name}/>
                         </Link>
                       </td>
                       <td>
                         <p>Name : {product.name}</p>
                         <p>Price : ${product.price}</p>
-                        <p>{product.description}</p>
+                        <p>Stock : {product.stock}</p>
+                        <p>Description:<br/>{product.description}</p>
+                        
                       </td>
                       <td width="200">
                         <QuantityBtn productInfo={product} />
@@ -79,12 +81,20 @@ export default function Checkout() {
   )
 
   function handleCheckout() {
+    const payload = {
+      user_id: 1,
+      items: cartItems.map(item => ({
+        id: item.id,
+        quantity: item.quantity
+      }))
+    };
+
     fetch("http://localhost:5000/api/checkout", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(cartItems)
+      body: JSON.stringify(payload)
     })
     .then((res) => res.json())
     .then((data) => {

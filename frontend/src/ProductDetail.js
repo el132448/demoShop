@@ -30,6 +30,7 @@ export default function ProductDetail() {
                 <td width="45%" padding="10">
                   <p>Name : {productDetail.name}</p>
                   <p>Price : {productDetail.price}</p>
+                  <p>Stock : {productDetail.stock}</p>
                   <p>Description :<br/>{productDetail.description}</p>
                   <QuantityBtn productInfo={productDetail}/>
                 </td>

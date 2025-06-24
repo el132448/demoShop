@@ -30,6 +30,7 @@ export default function QuantityBtn({productInfo}) {
                 image : productInfo.image,
                 price : productInfo.price,
                 description : productInfo.description,
+                stock : productInfo.stock,
                 quantity: 1
                 },
                 ...cartItems] //addition to the cartItems
