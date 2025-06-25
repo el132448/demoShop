@@ -8,6 +8,7 @@
 /backend/venv/
 /backend/.venv/
 /backend/app/__pycache__/
+/backend/.env
 
 # === COMMON ===
 .DS_Store
@@ -15,6 +16,7 @@
 /db_dumps/
 .vscode/
 .venv
+.other/
 
 # comment for development stage
-# *.env    
+*.env

@@ -7,6 +7,12 @@ pip freeze > requirements.txt
 pip install -r requirements.txt
 python run.py
 
+## BACKEND PACKAGE and IMAGE
+docker build -t my-flask-app .
+docker run -p 5000:5000 --env-file .env my-flask-app
+docker images
+docker tag my-flask-app:latest <aws_account_id>.dkr.ecr.<region>.amazonaws.com/demo-shop-backend:latest
+
 ## DATABASE
 - product: product detail
 - order: orders by customers
@@ -25,7 +31,6 @@ npm start
 
 ## Deployment
 - npm run build
-
 
 ## Note from Chatgpt
 ✅ 1. Basic Functionality Works
