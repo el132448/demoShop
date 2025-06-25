@@ -2,8 +2,6 @@ import secrets
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
-from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
 from .models import db
 import os
 
@@ -12,10 +10,11 @@ def create_app():
     app = Flask(__name__)
 
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+    print(f"Using database URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)
-    
+
     with app.app_context():
         db.create_all()
     
@@ -27,13 +26,6 @@ def create_app():
          supports_credentials=True,   # 是為了允許攜帶 Cookie。
          origins=origins if origins else "*"
     )
-        
-    # 初始化 Flask-Limiter，使用用戶 IP 限制請求頻率
-    limiter = Limiter(
-        key_func=get_remote_address,
-        default_limits=["100 per minute"]
-    )
-    limiter.init_app(app)
 
     from .routes import api_bp
     app.register_blueprint(api_bp, url_prefix="/api")

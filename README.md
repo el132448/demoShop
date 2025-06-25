@@ -11,7 +11,7 @@ python run.py
 docker build -t my-flask-app .
 docker run -p 5000:5000 --env-file .env my-flask-app
 docker images
-docker tag my-flask-app:latest <aws_account_id>.dkr.ecr.<region>.amazonaws.com/demo-shop-backend:latest
+docker tag my-flask-app:latest 335909101997.dkr.ecr.ap-northeast-1.amazonaws.com/demo-shop-backend:latest
 
 ## DATABASE
 - product: product detail
