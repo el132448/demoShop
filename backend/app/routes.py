@@ -14,7 +14,7 @@ def init_csrf():
         csrf_token,
         httponly=False,   # 讓 JS 可讀取
         secure=True,      # 上線時用 HTTPS
-        samesite="Lax"    # 防止部分跨站攻擊
+        samesite="None"     # 必須設為 None 才能跨網域
     )
     return response
 
