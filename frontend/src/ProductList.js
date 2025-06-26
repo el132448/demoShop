@@ -8,15 +8,20 @@ export default function ProductList() {
     const { API_BASE } = useContext(CartContext);
     let [productList, setProductList] = useState([])
 
-    //useEffect hook
-    useEffect(()=>{
-        //Situation 1: if without 2nd variable: will active the component for every render
-        //Situation 2: if Dependency Array is empty array: only active once when the page 1st render
-        //Situation 3: if Dependency Array is variable: active when 1st page render + destinated variable change
-        fetch(`${API_BASE}/products`)
-        .then(response => response.json())
-        .then(data => setProductList(data))
-    },[API_BASE])
+    useEffect(() => {
+    const fetchProductList = async () => {
+        try {
+        const response = await fetch(`${API_BASE}/products`);
+        if (!response.ok) throw new Error("Network response was not ok");
+        const data = await response.json();
+        setProductList(data);
+        } catch (error) {
+        console.error("Fetch product list failed:", error);
+        setProductList([]);  // 顯示空列表
+        }
+    };
+    fetchProductList();
+    }, [API_BASE]);
 
     // //button showing or hiding product list(unwanted)
     // const [showProduct, setShowProduct] = useState(false)
