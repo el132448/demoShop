@@ -6,7 +6,7 @@ import { CartContext } from './CartContext';
 import { useState, useEffect } from 'react';
 
 function App() {
-  const API_BASE = process.env.REACT_APP_API_BASE_URL || "/api";
+  const API_BASE = process.env.REACT_APP_API_BASE_URL;
   const [cartItems, setCartItems] = useState([])
 
   useEffect(() => {
